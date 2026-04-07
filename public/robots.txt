@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://openinference.org/sitemap.xml
+Sitemap: https://openinferencefoundation.org/sitemap.xml
