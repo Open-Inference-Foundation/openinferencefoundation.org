@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://openinference.org/sitemap.xml

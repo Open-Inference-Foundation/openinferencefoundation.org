@@ -1,0 +1,19 @@
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
+import ClientProviders from '@/components/ClientProviders';
+import Router from './Router';
+import './globals.css';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <HelmetProvider>
+      <ClientProviders>
+        <BrowserRouter>
+          <Router />
+        </BrowserRouter>
+      </ClientProviders>
+    </HelmetProvider>
+  </React.StrictMode>,
+);
