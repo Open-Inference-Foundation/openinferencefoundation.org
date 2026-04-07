@@ -55,9 +55,34 @@ Casino (builder platform)
 
 ---
 
-## Privacy
+## Your Data, Your Infrastructure
 
-Your data goes into YOUR database - not the builder's. Every user gets an isolated MongoDB instance keyed to their identity. Builders cannot access it.
+Every user gets two isolated storage layers. Both are yours. Builders cannot access either.
+
+```
+You (user)
+├── MongoDB Database (u_{your_id_hash})
+│   ├── tax_app__filings          ← data from Tax Prep site
+│   ├── tax_app__deductions       ← data from Tax Prep site
+│   ├── fitness__workouts         ← data from Fitness Tracker site
+│   └── legal__contracts          ← data from Legal Review site
+│
+└── S3 Workspace ({tenant}/{you}/{workspace}/)
+    ├── datasets/                 ← CSVs, parquet files you uploaded
+    ├── visualizations/           ← charts and dashboards agents generated
+    ├── reports/                  ← analysis reports
+    ├── scripts/                  ← code the agents wrote
+    ├── models/                   ← ML models trained on your data
+    └── conversations/            ← chat history
+```
+
+**MongoDB** — every user gets their own isolated database for app data. When you use a tax prep site, your tax data goes into YOUR database, not the builder's. The builder has no credentials for it. Each site's collections are prefixed with the site ID so data from different apps never collides.
+
+**S3 Workspaces** — every user gets isolated S3 paths for everything else. Datasets you upload, visualizations agents generate, reports, scripts, models — all scoped to your tenant, your user ID, your workspace. No other user can access your paths.
+
+Apps are a view into your data, not a container for it. You carry your data across every site in the network.
+
+## Privacy
 
 PII is masked by [Microsoft Presidio](https://microsoft.github.io/presidio/) before any external LLM call. SSNs, credit cards, bank numbers - always redacted. The LLM never sees your raw data.
 

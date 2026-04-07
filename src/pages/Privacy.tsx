@@ -223,60 +223,106 @@ export default function Privacy() {
         {/* Data Isolation Diagram */}
         <DataIsolationDiagram />
 
-        {/* Your Data, Your Database */}
+        {/* Your Data, Your Infrastructure */}
         <div className="mb-12">
           <h2 className="font-display text-2xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
-            Your Data, Your Database
+            Your Data, Your Infrastructure
           </h2>
           <p className="text-sm mb-6" style={{ color: 'var(--color-text-secondary)' }}>
-            When you use a site built on <a href="https://casino.flowstack.fun" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: 'var(--color-accent)' }}>Casino</a> - a tax prep app, a fitness tracker, a legal review tool -
-            your data doesn't go into the builder's database. It goes into yours.
+            When you use a site built on <a href="https://casino.flowstack.fun" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: 'var(--color-accent)' }}>Casino</a>,
+            your data doesn't go into the builder's storage. It goes into yours. Every user gets
+            two isolated storage layers - both keyed to your identity, both inaccessible to builders.
           </p>
 
-          <div
-            className="p-6 rounded-xl border mb-6"
-            style={{ borderColor: 'color-mix(in srgb, var(--color-accent) 40%, transparent)', backgroundColor: 'color-mix(in srgb, var(--color-accent) 5%, transparent)' }}
-          >
-            <h3 className="font-display font-bold text-sm mb-3" style={{ color: 'var(--color-accent)' }}>How it works</h3>
-            <div className="space-y-3 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-              <p>
-                Every user gets their own isolated MongoDB database, derived from their user ID. When you
-                visit a tax prep site and enter your W-2 data, that data is written to a collection in
-                <em> your</em> database - not the builder's. The collection is prefixed with the site ID
-                so it's scoped to that app, but the database it lives in is yours.
+          {/* Two storage layers */}
+          <div className="grid sm:grid-cols-2 gap-4 mb-6">
+            {/* MongoDB */}
+            <div
+              className="p-5 rounded-xl border"
+              style={{ borderColor: 'color-mix(in srgb, var(--color-accent) 40%, transparent)', backgroundColor: 'color-mix(in srgb, var(--color-accent) 5%, transparent)' }}
+            >
+              <h3 className="font-display font-bold text-sm mb-1" style={{ color: 'var(--color-accent)' }}>Your MongoDB Database</h3>
+              <p className="text-[10px] font-mono mb-3" style={{ color: 'var(--color-text-tertiary)' }}>u_{'{sha256(your_id)}'}</p>
+              <p className="text-xs mb-3" style={{ color: 'var(--color-text-secondary)' }}>
+                Every user gets their own isolated MongoDB database for app data. When you
+                use a tax prep site and enter your W-2 data, it's written to a collection in
+                <strong style={{ color: 'var(--color-text)' }}> your</strong> database. The builder
+                has no credentials for it.
               </p>
-              <p>
-                The builder who created the tax prep site has no credentials for your database. They can't
-                query it. They can't read your records. They only have access to their own database. The
-                site's code can read and write to your collections while you're using it - just like a
-                web app reads your browser's localStorage - but the data belongs to you.
+              <div className="space-y-1.5">
+                {[
+                  { collection: 'tax_app__filings', desc: 'From Tax Prep site' },
+                  { collection: 'tax_app__deductions', desc: 'From Tax Prep site' },
+                  { collection: 'fitness__workouts', desc: 'From Fitness Tracker' },
+                  { collection: 'legal__contracts', desc: 'From Legal Review' },
+                ].map(({ collection, desc }) => (
+                  <div key={collection} className="flex items-center justify-between px-2 py-1 rounded" style={{ backgroundColor: 'var(--color-surface)' }}>
+                    <span className="text-[10px] font-mono" style={{ color: 'var(--color-accent)' }}>{collection}</span>
+                    <span className="text-[10px]" style={{ color: 'var(--color-text-tertiary)' }}>{desc}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-[10px] mt-3" style={{ color: 'var(--color-text-tertiary)' }}>
+                Each site's collections are prefixed with the site ID. Data from different apps never collides.
               </p>
+            </div>
+
+            {/* S3 Workspace */}
+            <div
+              className="p-5 rounded-xl border"
+              style={{ borderColor: 'color-mix(in srgb, var(--color-accent-2) 40%, transparent)', backgroundColor: 'color-mix(in srgb, var(--color-accent-2) 5%, transparent)' }}
+            >
+              <h3 className="font-display font-bold text-sm mb-1" style={{ color: 'var(--color-accent-2)' }}>Your S3 Workspace</h3>
+              <p className="text-[10px] font-mono mb-3" style={{ color: 'var(--color-text-tertiary)' }}>{'{tenant}/{you}/{workspace}/'}</p>
+              <p className="text-xs mb-3" style={{ color: 'var(--color-text-secondary)' }}>
+                Everything else - datasets you upload, charts agents generate, reports, scripts,
+                models, conversation history - lives in your isolated S3 workspace. No other
+                user can access your paths.
+              </p>
+              <div className="space-y-1.5">
+                {[
+                  { path: 'datasets/', desc: 'CSVs, parquet files you uploaded' },
+                  { path: 'visualizations/', desc: 'Charts and dashboards' },
+                  { path: 'reports/', desc: 'Analysis reports' },
+                  { path: 'scripts/', desc: 'Code the agents wrote' },
+                  { path: 'models/', desc: 'ML models trained on your data' },
+                  { path: 'conversations/', desc: 'Chat history' },
+                ].map(({ path, desc }) => (
+                  <div key={path} className="flex items-center justify-between px-2 py-1 rounded" style={{ backgroundColor: 'var(--color-surface)' }}>
+                    <span className="text-[10px] font-mono" style={{ color: 'var(--color-accent-2)' }}>{path}</span>
+                    <span className="text-[10px]" style={{ color: 'var(--color-text-tertiary)' }}>{desc}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Example flow */}
-          <div className="overflow-x-auto">
+          {/* Ownership table */}
+          <div className="overflow-x-auto mb-6">
             <table className="w-full text-sm">
               <thead>
                 <tr style={{ borderBottom: '2px solid var(--color-border)' }}>
                   <th className="text-left py-3 px-4 font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Data</th>
-                  <th className="text-left py-3 px-4 font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Stored In</th>
+                  <th className="text-left py-3 px-4 font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Where</th>
                   <th className="text-left py-3 px-4 font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Owner</th>
                   <th className="text-left py-3 px-4 font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Builder Sees?</th>
                 </tr>
               </thead>
               <tbody>
                 {[
-                  { data: 'Tax filings you enter', stored: 'Your database', owner: 'You', sees: 'No' },
-                  { data: 'Health data you upload', stored: 'Your database', owner: 'You', sees: 'No' },
-                  { data: 'Legal documents you share', stored: 'Your database', owner: 'You', sees: 'No' },
-                  { data: 'Financial records', stored: 'Your database', owner: 'You', sees: 'No' },
-                  { data: 'App configuration / schema', stored: 'App config (S3)', owner: 'Public', sees: 'Yes' },
-                  { data: 'Builder\'s own analytics', stored: 'Builder\'s database', owner: 'Builder', sees: 'Only theirs' },
+                  { data: 'Tax filings you enter', stored: 'Your MongoDB', owner: 'You', sees: 'No' },
+                  { data: 'Datasets you upload', stored: 'Your S3 workspace', owner: 'You', sees: 'No' },
+                  { data: 'Charts agents generate', stored: 'Your S3 workspace', owner: 'You', sees: 'No' },
+                  { data: 'Health data from apps', stored: 'Your MongoDB', owner: 'You', sees: 'No' },
+                  { data: 'Reports and scripts', stored: 'Your S3 workspace', owner: 'You', sees: 'No' },
+                  { data: 'Legal documents', stored: 'Your MongoDB', owner: 'You', sees: 'No' },
+                  { data: 'Conversation history', stored: 'Your S3 workspace', owner: 'You', sees: 'No' },
+                  { data: 'ML models', stored: 'Your S3 workspace', owner: 'You', sees: 'No' },
+                  { data: 'App schema / config', stored: 'App config (shared)', owner: 'Public', sees: 'Yes' },
                 ].map(({ data, stored, owner, sees }) => (
                   <tr key={data} style={{ borderBottom: '1px solid var(--color-border)' }}>
                     <td className="py-2.5 px-4 text-xs" style={{ color: 'var(--color-text)' }}>{data}</td>
-                    <td className="py-2.5 px-4 text-xs font-mono" style={{ color: 'var(--color-accent)' }}>{stored}</td>
+                    <td className="py-2.5 px-4 text-xs font-mono" style={{ color: stored.includes('MongoDB') ? 'var(--color-accent)' : 'var(--color-accent-2)' }}>{stored}</td>
                     <td className="py-2.5 px-4 text-xs" style={{ color: 'var(--color-text-secondary)' }}>{owner}</td>
                     <td className="py-2.5 px-4 text-xs" style={{ color: sees === 'No' ? 'var(--color-accent-2)' : 'var(--color-text-tertiary)' }}>{sees}</td>
                   </tr>
@@ -285,6 +331,11 @@ export default function Privacy() {
             </table>
           </div>
 
+          <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+            Apps are a view into your data, not a container for it. You carry your data across
+            every site in the network because it's always in your infrastructure - your MongoDB
+            database and your S3 workspace. If a site goes offline, your data is still there.
+          </p>
         </div>
 
         {/* Identity */}
