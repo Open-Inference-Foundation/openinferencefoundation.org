@@ -1,4 +1,5 @@
 import { usePrivy } from '@privy-io/react-auth';
+import { useNavigate } from 'react-router-dom';
 import { formatAddress } from '@/lib/formatters';
 
 /**
@@ -8,7 +9,8 @@ import { formatAddress } from '@/lib/formatters';
  * in `<WalletProvider>` which internally mounts `<PrivyProvider>`.
  */
 export default function WalletButton() {
-  const { ready, authenticated, user, login, logout } = usePrivy();
+  const { ready, authenticated, user, login } = usePrivy();
+  const navigate = useNavigate();
   const address = user?.wallet?.address;
 
   if (!ready) {
@@ -26,14 +28,15 @@ export default function WalletButton() {
   if (authenticated && address) {
     return (
       <button
-        onClick={() => logout()}
+        onClick={() => navigate('/account')}
         className="px-3 py-1.5 rounded-lg text-sm font-mono font-medium border transition-colors cursor-pointer"
         style={{
           borderColor: 'var(--color-accent)',
           color: 'var(--color-accent)',
           backgroundColor: 'var(--color-accent-light)',
         }}
-        aria-label={`Disconnect wallet ${formatAddress(address)}`}
+        aria-label={`View account ${formatAddress(address)}`}
+        title="View account & balances"
       >
         {formatAddress(address)}
       </button>
