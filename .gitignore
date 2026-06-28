@@ -3,3 +3,6 @@ dist
 .env.local
 .env.production
 *.tsbuildinfo
+
+# local-only deploy tooling (kept out of public repo)
+scripts/deploy-aws.sh
