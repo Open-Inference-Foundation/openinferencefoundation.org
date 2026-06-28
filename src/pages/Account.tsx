@@ -22,7 +22,6 @@ interface Row {
   name: string;
   value: bigint | undefined;
   decimals: number;
-  hint?: string;
 }
 
 export default function Account() {
@@ -45,11 +44,11 @@ export default function Account() {
   };
 
   const rows: Row[] = [
-    { symbol: 'ETH', name: 'Ethereum (gas)', value: eth?.value, decimals: 18, hint: 'Needed to pay gas for on-chain purchases' },
-    { symbol: 'USDC', name: 'USD Coin', value: usdc, decimals: 6, hint: 'Spend to buy AGENT on-chain' },
-    { symbol: 'USDT', name: 'Tether', value: usdt, decimals: 6, hint: 'Spend to buy AGENT on-chain' },
-    { symbol: 'AGENT', name: 'Query credits', value: agent, decimals: 18, hint: 'Your currency — spent on AI queries' },
-    { symbol: 'INFER', name: 'Membership token', value: infer, decimals: 18, hint: 'Stake for tier discounts + governance' },
+    { symbol: 'ETH', name: 'Ethereum', value: eth?.value, decimals: 18 },
+    { symbol: 'USDC', name: 'USD Coin', value: usdc, decimals: 6 },
+    { symbol: 'USDT', name: 'Tether', value: usdt, decimals: 6 },
+    { symbol: 'AGENT', name: 'Query credits', value: agent, decimals: 18 },
+    { symbol: 'INFER', name: 'Membership token', value: infer, decimals: 18 },
   ];
 
   return (
@@ -125,8 +124,7 @@ export default function Account() {
 
             {/* Funding note */}
             <div className="mt-4 p-3 rounded-lg text-xs" style={{ backgroundColor: 'var(--color-accent-light)', color: 'var(--color-accent)' }}>
-              To buy AGENT <strong>on-chain</strong> your wallet needs USDC (or USDT) <em>and</em> a little ETH for gas.
-              No crypto yet? <Link to="/buy" className="underline font-semibold">Buy AGENT with a card</Link> instead — it mints AGENT straight to this wallet.
+              Buying AGENT is <strong>gasless</strong> — <Link to="/buy" className="underline font-semibold">buy with a card</Link> and it's minted straight to this wallet (no ETH or USDC needed). The on-chain USDC path is only for crypto-native users who already hold USDC + ETH.
             </div>
 
             <div className="mt-8">
