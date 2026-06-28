@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@flowstack/sdk": "file:../flowstack-sdk",
+    "@privy-io/react-auth": "^3.21.2",
+    "@privy-io/wagmi": "^4.0.13",
     "@tanstack/react-query": "^5.96.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",

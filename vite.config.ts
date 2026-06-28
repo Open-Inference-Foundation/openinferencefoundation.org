@@ -16,15 +16,25 @@ export default defineConfig(({ command }) => ({
         : {}),
     },
     // CRITICAL: @flowstack/sdk is symlinked (file:../flowstack-sdk) and ships its
-    // OWN (older) copy of @privy-io/react-auth in its node_modules. Without
-    // dedupe, a production bundle pulls the SDK's <PrivyProvider> from one copy
-    // while OIF's usePrivy() reads the other — two React contexts, so
-    // usePrivy().ready never flips true and the login button sticks on
-    // "Loading…". Dev masks this because vite resolves bare imports from the
-    // project root. Dedupe forces a single instance in BOTH dev and build.
-    // Only list packages that exist at OIF's root (not @privy-io/wagmi — the SDK
-    // resolves that from its own node_modules and it's a different major).
-    dedupe: ['react', 'react-dom', '@privy-io/react-auth'],
+    // OWN copies of these packages in its node_modules (older majors:
+    // @privy-io/react-auth@2, @privy-io/wagmi@1, wagmi@2). Without dedupe, a
+    // production bundle pulls the SDK's <PrivyProvider>/<WagmiProvider> from one
+    // copy while OIF's usePrivy()/useAccount() read another — separate React
+    // contexts. Symptoms: login stuck on "Loading…" (Privy) and
+    // WagmiProviderNotFoundError + "Connect" never clearing after connect
+    // (wagmi). Dev masks it because vite resolves bare imports from the project
+    // root. Dedupe forces a single instance of the whole Privy+wagmi stack in
+    // BOTH dev and build. OIF must have each of these at its root (we install
+    // @privy-io/wagmi@4 to pair with privy@3 + wagmi@3).
+    dedupe: [
+      'react',
+      'react-dom',
+      '@privy-io/react-auth',
+      '@privy-io/wagmi',
+      'wagmi',
+      'viem',
+      '@tanstack/react-query',
+    ],
   },
   server: {
     port: 3001,
