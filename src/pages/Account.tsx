@@ -22,6 +22,7 @@ interface Row {
   name: string;
   value: bigint | undefined;
   decimals: number;
+  sub?: string;
 }
 
 export default function Account() {
@@ -29,7 +30,10 @@ export default function Account() {
   const { address: wagmiAddr } = useAccount();
   const address = (user?.wallet?.address ?? wagmiAddr) as `0x${string}` | undefined;
 
-  const { infer, agent, usdc, usdt } = useTokenBalances(address);
+  const { infer, agent, agentDeposited, usdc, usdt } = useTokenBalances(address);
+  const agentTotal = agent === undefined && agentDeposited === undefined
+    ? undefined
+    : (agent ?? 0n) + (agentDeposited ?? 0n);
   const { data: eth } = useBalance({ address, query: { enabled: !!address } });
   const position = useStakingPosition(address);
   const [copied, setCopied] = useState(false);
@@ -47,7 +51,12 @@ export default function Account() {
     { symbol: 'ETH', name: 'Ethereum', value: eth?.value, decimals: 18 },
     { symbol: 'USDC', name: 'USD Coin', value: usdc, decimals: 6 },
     { symbol: 'USDT', name: 'Tether', value: usdt, decimals: 6 },
-    { symbol: 'AGENT', name: 'Query credits', value: agent, decimals: 18 },
+    {
+      symbol: 'AGENT', name: 'Query credits', value: agentTotal, decimals: 18,
+      sub: agentDeposited && agentDeposited > 0n
+        ? `${fmt(agent, 18, 2)} in wallet + ${fmt(agentDeposited, 18, 2)} deposited`
+        : undefined,
+    },
     { symbol: 'INFER', name: 'Membership token', value: infer, decimals: 18 },
   ];
 
@@ -115,8 +124,13 @@ export default function Account() {
                     <div className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>{r.symbol}</div>
                     <div className="text-xs" style={{ color: 'var(--color-text-tertiary)' }}>{r.name}</div>
                   </div>
-                  <div className="font-mono text-sm text-right" style={{ color: 'var(--color-text)' }}>
-                    {fmt(r.value, r.decimals)}
+                  <div className="text-right">
+                    <div className="font-mono text-sm" style={{ color: 'var(--color-text)' }}>
+                      {fmt(r.value, r.decimals)}
+                    </div>
+                    {r.sub && (
+                      <div className="text-xs mt-0.5" style={{ color: 'var(--color-text-tertiary)' }}>{r.sub}</div>
+                    )}
                   </div>
                 </div>
               ))}

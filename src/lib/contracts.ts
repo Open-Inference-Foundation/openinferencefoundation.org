@@ -57,6 +57,19 @@ export const ERC20_ABI = [
   },
 ] as const;
 
+// AgentPayment ABI — getBalance(account) returns AGENT deposited/credited in
+// the payment contract (separate from the wallet's ERC-20 balanceOf). The
+// backend's /billing/agent/balance counts BOTH; the UI must too.
+export const AGENT_PAYMENT_ABI = [
+  {
+    inputs: [{ name: 'account', type: 'address' }],
+    name: 'getBalance',
+    outputs: [{ name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+] as const;
+
 // InferStaking ABI — view + write functions
 export const STAKING_ABI = [
   // View functions
