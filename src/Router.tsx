@@ -14,6 +14,7 @@ const Thesis = lazy(() => import('@/pages/Thesis'));
 const Privacy = lazy(() => import('@/pages/Privacy'));
 const Account = lazy(() => import('@/pages/Account'));
 const ApiKeys = lazy(() => import('@/pages/ApiKeys'));
+const Payouts = lazy(() => import('@/pages/Payouts'));
 const AuthBrokerPage = lazy(() => import('@/pages/AuthBrokerPage'));
 
 /**
@@ -76,6 +77,7 @@ export default function Router() {
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/account" element={<Account />} />
           <Route path="/api-keys" element={<ApiKeys />} />
+          <Route path="/payouts" element={<Payouts />} />
         </Route>
 
         {/* OIF-as-IdP login broker for built apps. Built apps open this in a
