@@ -26,6 +26,14 @@ const NAV_ITEMS: (DropdownItem | NavGroup)[] = [
   },
   { path: '/privacy', label: 'Privacy' },
   { path: '/docs', label: 'Docs' },
+  {
+    label: 'Account',
+    items: [
+      { path: '/account', label: 'Wallet & Balances' },
+      { path: '/api-keys', label: 'API Keys' },
+      { path: '/payouts', label: 'Payouts' },
+    ],
+  },
 ];
 
 // Flatten for mobile
@@ -108,15 +116,6 @@ export default function Nav() {
 
         {/* Desktop nav */}
         <div className="hidden lg:flex items-center gap-1">
-          <a
-            href="https://casino.flowstack.fun"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-3 py-1.5 rounded-md text-sm font-semibold transition-colors"
-            style={{ color: 'var(--color-accent-2)', backgroundColor: 'var(--color-accent-2-light)' }}
-          >
-            Try Casino
-          </a>
           {NAV_ITEMS.map((item, i) =>
             isGroup(item) ? (
               <Dropdown key={i} group={item} pathname={pathname} />
@@ -159,16 +158,6 @@ export default function Nav() {
       {/* Mobile menu */}
       {mobileOpen && (
         <div className="lg:hidden border-t px-4 py-3 space-y-1" style={{ borderColor: 'var(--color-border)' }}>
-          <a
-            href="https://casino.flowstack.fun"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setMobileOpen(false)}
-            className="block px-3 py-2 rounded-md text-sm font-semibold"
-            style={{ color: 'var(--color-accent-2)', backgroundColor: 'var(--color-accent-2-light)' }}
-          >
-            Try Casino
-          </a>
           {ALL_LINKS.map(({ path, label }) => (
             <Link
               key={path}
