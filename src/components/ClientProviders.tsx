@@ -2,6 +2,7 @@ import { FlowstackProvider } from '@flowstack/sdk';
 import { WalletProvider } from '@flowstack/sdk/wallet';
 import { getFlowstackConfig } from '@/lib/config';
 import WalletBridge from '@/components/WalletBridge';
+import FlowstackSessionBridge from '@/components/FlowstackSessionBridge';
 
 const PRIVY_APP_ID = import.meta.env.VITE_PRIVY_APP_ID || '';
 const WALLETCONNECT_PROJECT_ID =
@@ -29,6 +30,7 @@ export default function ClientProviders({ children }: { children: React.ReactNod
       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
       <FlowstackProvider config={config}>
         <WalletBridge />
+        <FlowstackSessionBridge />
         {children as any}
       </FlowstackProvider>
     </WalletProvider>
