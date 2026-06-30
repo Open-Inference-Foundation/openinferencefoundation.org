@@ -1,4 +1,4 @@
-import { SEO } from '@flowstack/sdk';
+import { SEO } from '@/components/SEO';
 import { NetworkDiagram } from '@/components/diagrams';
 
 export default function Agents() {

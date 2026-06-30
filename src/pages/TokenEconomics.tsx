@@ -1,4 +1,4 @@
-import { SEO } from '@flowstack/sdk';
+import { SEO } from '@/components/SEO';
 import { CONTRACTS, ARBISCAN_BASE } from '@/lib/contracts';
 import { StakingTiersDiagram, TokenFlowDiagram } from '@/components/diagrams';
 

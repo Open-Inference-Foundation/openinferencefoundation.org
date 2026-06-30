@@ -1,5 +1,7 @@
-import { SEO, FAQ, buildFAQPageJsonLd } from '@flowstack/sdk';
-import type { FAQItem } from '@flowstack/sdk';
+import { SEO } from '@/components/SEO';
+import { FAQ } from '@/components/FAQ';
+import type { FAQItem } from '@/components/FAQ';
+import { buildFAQPageJsonLd } from '@/lib/seo';
 import { CONTRACTS, ARBISCAN_BASE } from '@/lib/contracts';
 import { TokenFlowDiagram, InfrastructureDiagram } from '@/components/diagrams';
 

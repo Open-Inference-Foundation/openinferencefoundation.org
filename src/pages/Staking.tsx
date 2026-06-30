@@ -1,4 +1,4 @@
-import { SEO } from '@flowstack/sdk';
+import { SEO } from '@/components/SEO';
 import { useAccount } from 'wagmi';
 import { TIER_INFO } from '@/lib/contracts';
 import TierBadge from '@/components/TierBadge';

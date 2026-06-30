@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { SEO, buildOrganizationJsonLd, buildWebSiteJsonLd } from '@flowstack/sdk';
+import { SEO } from '@/components/SEO';
+import { buildOrganizationJsonLd, buildWebSiteJsonLd } from '@/lib/seo';
 import { TIER_INFO } from '@/lib/contracts';
 import Countdown from '@/components/Countdown';
 
@@ -56,15 +57,6 @@ export default function Home() {
             >
               Stake INFER
             </Link>
-            <a
-              href="https://casino.flowstack.fun"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-6 py-3 rounded-lg font-semibold text-base border transition-colors"
-              style={{ borderColor: 'var(--color-accent-2)', color: 'var(--color-accent-2)', backgroundColor: 'var(--color-accent-2-light)' }}
-            >
-              Try Casino (Live Demo)
-            </a>
             <Link
               to="/tokenomics"
               className="px-6 py-3 rounded-lg font-semibold text-base border transition-colors"

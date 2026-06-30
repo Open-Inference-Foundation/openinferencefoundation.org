@@ -1,4 +1,4 @@
-import { SEO } from '@flowstack/sdk';
+import { SEO } from '@/components/SEO';
 import { Link } from 'react-router-dom';
 import { TIER_INFO, CONTRACTS, ARBISCAN_BASE } from '@/lib/contracts';
 
