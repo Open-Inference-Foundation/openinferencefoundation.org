@@ -34,9 +34,11 @@ import { useFlowstack } from '@flowstack/sdk';
 // - http://localhost:<port> (local dev)
 // - https://keoncummings.com (Keon's personal site, uses SDK directly)
 // - https://openinferencefoundation.org (OIF co-op site, uses SDK directly)
+// - https://flowstack.fun (Flowstack marketing site, consumes the broker for
+//   its /api-keys MCP flow)
 // NOTE: keep this strict. Any relaxation here is a cross-origin auth risk.
 const ALLOWED_RETURN_ORIGIN =
-  /^https:\/\/[a-z0-9-]+\.casino\.flowstack\.fun$|^http:\/\/localhost:\d+$|^https:\/\/keoncummings\.com$|^https:\/\/openinferencefoundation\.org$/;
+  /^https:\/\/[a-z0-9-]+\.casino\.flowstack\.fun$|^http:\/\/localhost:\d+$|^https:\/\/keoncummings\.com$|^https:\/\/openinferencefoundation\.org$|^https:\/\/flowstack\.fun$/;
 
 // Redirect-mode allowlist for mobile native apps that can't receive postMessage
 // (expo-web-browser.openAuthSessionAsync can only observe deep-link redirects).
